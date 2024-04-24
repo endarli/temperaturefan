@@ -20,7 +20,7 @@ long rpm;
 const word PWM_FREQ_HZ = 25000;     //Adjust this value to adjust the frequency
 const word TCNT1_TOP = 16000000/(2*PWM_FREQ_HZ);
 
-float temp_to_spd = 10;           // 80/8 (8 is the range of temps we're covering)
+float temp_to_spd = 10;             // 80/8 (8 is the range of temps we're covering)
 
 // SYTEM VARS
 // setting true: temp , false: manual
@@ -137,7 +137,6 @@ void loop() {
       setPwmDuty(setMan*30 + 30);
     }
     
-
     // Print same values in LCD
     lcd.setCursor(0, 0);
     if (setting) {
@@ -157,7 +156,6 @@ void loop() {
     lcd.print("Speed: ");
     if(setting){
       lcd.print(tempToDuty());
-
     }else{
       lcd.print(setMan*30 + 30);
     }
@@ -168,22 +166,25 @@ void loop() {
     lcd.setCursor(0, 1);
     lcd.print("                ");
   }
-  consolePrint();
   irConsolePrint();
 }
 
 void irConsolePrint(){
-  Serial.print(int(temperature)); //print temperature
+  Serial.print("Temperature = ");
+  Serial.print(temperature); //print actual temperature
   Serial.println(" F");
+
   Serial.print("Set Temp = ");
-  Serial.print(int(setTemp)); //print temperature
+  Serial.print(int(setTemp)); //print set temperature
   Serial.println(" F");
+
   Serial.print("Mode: ");
   if (setting) {
     Serial.println("Temp");
   } else {
     Serial.println("Manual");
   }
+
   Serial.print("Status: ");
   if (status) {
     Serial.println("On");
@@ -258,9 +259,4 @@ int listenForIR(void) {
     pulses[currentpulse][1] = lowpulse;
     currentpulse++;
   }
-}
-
-void consolePrint(){
-  Serial.print("Temperature = ");
-  Serial.println(temperature);
 }
