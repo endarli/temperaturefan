@@ -20,7 +20,7 @@ long rpm;
 const word PWM_FREQ_HZ = 25000;     //Adjust this value to adjust the frequency
 const word TCNT1_TOP = 16000000/(2*PWM_FREQ_HZ);
 
-float temp_to_spd = 10;             // 80/8 (8 is the range of temps we're covering)
+float temp_to_spd = 3;             // 75/25 (25 is the range of temps we're covering)
 
 // SYTEM VARS
 // setting true: temp , false: manual
@@ -119,7 +119,7 @@ void loop() {
     if (IRcompare(numberpulses, IRDownSignal, DownSize)) {
       if (setting == true) {
         // temp control
-        if (60 < setTemp) {
+        if (65 < setTemp) {
           setTemp--;
         }
       } else {
@@ -196,7 +196,7 @@ void irConsolePrint(){
 int tempToDuty() {
   int duty = 0;
   if ((temperature - setTemp) > 0) {
-    duty = (temperature - setTemp) * temp_to_spd + 20;
+    duty = (temperature - setTemp) * temp_to_spd + 30;
   }
   return duty;
 }
