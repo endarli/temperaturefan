@@ -19,15 +19,14 @@ bool countprint;
 long rpm;
 const word PWM_FREQ_HZ = 25000;     //Adjust this value to adjust the frequency
 const word TCNT1_TOP = 16000000/(2*PWM_FREQ_HZ);
-
-float temp_to_spd = 3;             // 75/25 (25 is the range of temps we're covering)
+float temp_to_spd = 11;             // 66/6 (6 is the max temp diff range for linear scaling)
 
 // SYTEM VARS
 // setting true: temp , false: manual
 bool setting = true;
 bool status = false;
 rgb_lcd lcd;                        // LCD "object"
-float setTemp = 75;
+float setTemp = 72;
 float temperature = 70;
 long setMan = 1;
 char *setManS[] = {"Low", "Med", "High"};
@@ -119,7 +118,7 @@ void loop() {
     if (IRcompare(numberpulses, IRDownSignal, DownSize)) {
       if (setting == true) {
         // temp control
-        if (65 < setTemp) {
+        if (60 < setTemp) {
           setTemp--;
         }
       } else {
@@ -195,8 +194,10 @@ void irConsolePrint(){
 
 int tempToDuty() {
   int duty = 0;
-  if ((temperature - setTemp) > 0) {
-    duty = (temperature - setTemp) * temp_to_spd + 30;
+  if ((temperature - setTemp) > 0 && (temperature - setTemp) <= 6) {
+    duty = (temperature - setTemp) * temp_to_spd + 34;
+  } else if ((temperature - setTemp) > 6) {
+    duty = 100;
   }
   return duty;
 }
