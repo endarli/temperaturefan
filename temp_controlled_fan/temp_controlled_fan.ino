@@ -66,7 +66,7 @@ void setup() {
   // ICES1      = 0b0    (Input capture edge select disabled)
   // CS(12:10)  = 0b001  (Input clock select = clock/1)
   
-  // Set the PWM control for a computer fan
+  // Set the PWM control for DC fan
   TCCR1A |= (1 << COM1A1) | (1 << WGM11);
   TCCR1B |= (1 << WGM13) | (1 << CS10);
   ICR1 = TCNT1_TOP;
@@ -201,6 +201,7 @@ int tempToDuty() {
   }
   return duty;
 }
+
 void setPwmDuty(byte duty) {
   OCR1A = (word) (duty*TCNT1_TOP)/100;
 }
@@ -223,6 +224,7 @@ boolean IRcompare(int numpulses, int Signal[], int SignalSize[]) {
       return false;
     }
   }
+
   if (SignalSize[0] <= numpulses && numpulses <= SignalSize[1]) {
     return true;
   } else {
